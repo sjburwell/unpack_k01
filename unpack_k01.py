@@ -5,24 +5,57 @@ import pandas as pd
 import math
 from shutil import copyfile
 import shutil
+import tkinter as tk
+from tkinter import filedialog
+from pathlib import Path
 
-xls    = '~/Downloads/ankerlab-participant-data-log.xlsx'
-zipdir = '/labs/ankerlab/data/k01/zips'
+root = tk.Tk()
+root.withdraw()
+xls = filedialog.askopenfilename(
+  title='Identify Participant Data Log:',
+  multiple=False,
+  initialdir=str(Path.home())+'/Downloads',
+  filetypes=[('Excel files','.xlsx','.xls')]
+)
+df = pd.read_excel(xls,sheet_name="Data Log",header=0)
+
+ziparchs = filedialog.askopenfilename(
+  title='Identify Session Zip file(s):',
+  multiple=True,
+  filetypes=[('Zip files','.zip')]
+)
+
+ses_dict = {
+  '1': 'S1',
+  '2': 'S2',
+  '3': 'S3', # this is occasionally labeled 'M1', need to rename to S3 on Box
+  '4': 'S4'  # this is occasionally labeled 'M4', need to rename to S4 on Box
+};
+
+donezips = []
 tmpdir = './tmpdir'
-df = pd.read_excel(xls,sheet_name="Sheet1",header=0)
-
 if not os.path.isdir(tmpdir):
   os.makedirs(tmpdir)
 for ii in range(0,len(df)):
-  cursub = str(df.subject[ii]).zfill(3) #str(df.subject[ii])
-  curses = str(df.session[ii])
-  ziparch= zipdir+'/'+cursub+'_'+str(df.npu_order[ii])+'_S'+curses+'.zip'
-  if not os.path.isfile( ziparch ):
-    ziparch= zipdir+'/'+cursub+'_'+str(df.npu_order[ii])+'_M1.zip' #kloodge, 2020-01-14
-    if not os.path.isfile( ziparch ):
-      ziparch= zipdir+'/'+cursub+'_'+str(df.npu_order[ii])+'_M4.zip' #kloodge, 2020-01-14
+  try:
+    cursub = str(int(df.subject[ii])).zfill(3)
+    curses = str(int(df.session[ii]))
+  except:
+    pass
 
-  if os.path.isfile( ziparch ):
+  ziparch = None
+  for arch in ziparchs:
+    zipdir, zipfilename = os.path.split(arch)
+    ses_ext = ses_dict[curses]
+    ses_file = cursub+'_'+str(df.npu_order[ii])+'_'+ses_ext+'.zip'
+    if ses_file==zipfilename:
+      ziparch = arch
+      donezips = donezips+[arch]
+
+  if ziparch:
+    print('Unpacking '+ziparch+' matched to participant data log entry from '+str(df.loc[ii,'date']).split(' ')[0])
+
+  if ziparch:
     #copyfile(glob.glob(zipdir+'/'+str(df.subject[ii])+'*.zip')[0], tmpdir+'/tmp.zip')
     copyfile( ziparch, tmpdir+'/tmp.zip' )
     zipfile.ZipFile(tmpdir + '/tmp.zip').extractall(tmpdir+'/')
@@ -107,7 +140,8 @@ for ii in range(0,len(df)):
     if os.path.isfile(tmpdir + '/tmp.zip'):
        os.remove(tmpdir + '/tmp.zip')
 
-
-  
-
+print('Completed: the following Zips were processed: ')
+print(donezips)
+print('Warning: the following Zips were ignored (hint: check how the zipfile is named and how it is labeled in the Participants Data Log): ')
+print(list(set(list(ziparchs)) - set(donezips)))
 
