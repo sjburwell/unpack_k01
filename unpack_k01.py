@@ -72,7 +72,7 @@ for ii in range(0,len(df)):
         copyfile(file2,'/labs/ankerlab/data/k01/rest.pre/'+'sub-'+cursub+'_ses-'+curses+'_task-'+'restpre'+'_acq-'+'A1'+'_run-1.cdt.dpa')
         copyfile(file3,'/labs/ankerlab/data/k01/rest.pre/'+'sub-'+cursub+'_ses-'+curses+'_task-'+'restpre'+'_acq-'+'A1'+'_run-1.cdt.ceo')
       else:
-        print('unpack_k01.py; unable to process '+curdat[0]+', not 3 cdt files...')
+        print('unpack_k01.py; unable to process **rest.pre**, not 3 cdt files or files are named incorrectly...')
            
     #resting-state (post)
     if not math.isnan(df.run_rest_post[ii]):
@@ -86,7 +86,7 @@ for ii in range(0,len(df)):
         copyfile(file2,'/labs/ankerlab/data/k01/rest.post/'+'sub-'+cursub+'_ses-'+curses+'_task-'+'restpost'+'_acq-'+'A1'+'_run-1.cdt.dpa')
         copyfile(file3,'/labs/ankerlab/data/k01/rest.post/'+'sub-'+cursub+'_ses-'+curses+'_task-'+'restpost'+'_acq-'+'A1'+'_run-1.cdt.ceo')
       else:
-        print('unpack_k01.py; unable to process '+curdat[0]+', not 3 cdt files...')
+        print('unpack_k01.py; unable to process **rest.post**, not 3 cdt files or files are named incorrectly...')
 
     #npu (block 1, [+block 2])
     if not math.isnan(df.run_npu[ii]):
@@ -101,7 +101,7 @@ for ii in range(0,len(df)):
         copyfile(file2,'/labs/ankerlab/data/k01/npu/'+'sub-'+cursub+'_ses-'+curses+'_task-'+'npu'+'_acq-'+npuacq+'_run-1.cdt.dpa')
         copyfile(file3,'/labs/ankerlab/data/k01/npu/'+'sub-'+cursub+'_ses-'+curses+'_task-'+'npu'+'_acq-'+npuacq+'_run-1.cdt.ceo')
       else:
-        print('unpack_k01.py; unable to process '+curdat[0]+', not 3 cdt files...')
+        print('unpack_k01.py; unable to process **npu**, not 3 cdt files or files named incorrectly...')
 
     #npu (block 2, optional)
     if not math.isnan(df.run_npu_optional2nd[ii]):
@@ -116,7 +116,7 @@ for ii in range(0,len(df)):
         copyfile(file2,'/labs/ankerlab/data/k01/npu/'+'sub-'+cursub+'_ses-'+curses+'_task-'+'npu'+'_acq-'+npuacq+'_run-2.cdt.dpa')
         copyfile(file3,'/labs/ankerlab/data/k01/npu/'+'sub-'+cursub+'_ses-'+curses+'_task-'+'npu'+'_acq-'+npuacq+'_run-2.cdt.ceo')
       else:
-        print('unpack_k01.py; unable to process '+curdat[0]+', not 3 cdt files...')
+        print('unpack_k01.py; unable to process **npu (2nd optional file)**, not 3 cdt files or files named incorrectly...')
 
     #startle workup
     if not math.isnan(df.run_startle_workup[ii]):
@@ -131,7 +131,7 @@ for ii in range(0,len(df)):
         copyfile(file2,'/labs/ankerlab/data/k01/startle.workup/'+'sub-'+cursub+'_ses-'+curses+'_task-'+'startle'+'_acq-'+'A1'+'_run-1.cdt.dpa')
         copyfile(file3,'/labs/ankerlab/data/k01/startle.workup/'+'sub-'+cursub+'_ses-'+curses+'_task-'+'startle'+'_acq-'+'A1'+'_run-1.cdt.ceo')
       else:
-        print('unpack_k01.py; unable to process '+curdat[0]+', not 3 cdt files...')
+        print('unpack_k01.py; unable to process **startle.workup**, not 3 cdt files or files named incorrectly...')
     
     #delete the tmpdir contents
     cursubdir = tmpdir+'/'+ziparch.split('/')[-1].split('.zip')[0]
